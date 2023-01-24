@@ -8,10 +8,14 @@ class Service:
   def create(self, data):
     try:
       message = data['message'].replace('<script', '').replace('<', '').replace('>', '')
+
+      if len(message) > 200:
+        raise InvalidDataExcept('Message length must be less than 200 characters')
+
       author = data['author']
       self.repository.create(message, author)
     except KeyError:
       raise InvalidDataExcept('Missing required fields')
-    
+
   def get_random(self):
     return self.repository.get_random()
